@@ -2,6 +2,7 @@ package reqValidator
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 )
 
@@ -9,8 +10,33 @@ type structure interface {
 	Map() map[string]interface{}
 }
 
-// Validate make the validation, populate the received pointer and callback if has panics
-func Validate(st interface{}, inputMap map[string]interface{}) (err error) {
+// Validate the types and return a bool
+func Validate(structure structure, itemsMap map[string]interface{}) bool {
+	fmt.Println("DEPRECATED: Validate(structure structure, itemsMap map[string]interface{}) bool TRY ValidateAndPopulate(st interface{}, inputMap map[string]interface{}) (err error)")
+	stMap := structure.Map()
+
+	if len(stMap) != len(itemsMap) {
+		fmt.Println(len(stMap), len(itemsMap))
+		return false
+	}
+
+	for name, value := range stMap {
+		if _, ok := itemsMap[name]; !ok {
+			fmt.Println(name)
+			return false
+		}
+
+		if reflect.TypeOf(value).Kind() != reflect.TypeOf(itemsMap[name]).Kind() {
+			fmt.Println(name)
+			return false
+		}
+	}
+
+	return true
+}
+
+// ValidateAndPopulate make the validation, populate the received pointer and callback if has panics
+func ValidateAndPopulate(st interface{}, inputMap map[string]interface{}) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			switch x := r.(type) {
