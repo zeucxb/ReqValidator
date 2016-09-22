@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 type structure interface {
@@ -83,4 +84,15 @@ func ValidateForm(items ...[]string) bool {
 	}
 
 	return true
+}
+
+// ValidateImageURL Verify if the url has a valid image format
+func ValidateImageURL(url string, types ...string) (bool, string) {
+	for _, value := range types {
+		if strings.Contains(url, value) {
+			return true, value
+		}
+	}
+
+	return false, ""
 }

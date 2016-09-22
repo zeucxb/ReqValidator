@@ -1,3 +1,0 @@
-package: typeValidator
-import:
-- package: github.com/fatih/structs
