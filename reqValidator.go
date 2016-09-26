@@ -54,6 +54,10 @@ func ValidateAndPopulate(st interface{}, inputMap map[string]interface{}) (err e
 	t := reflect.ValueOf(st).Elem()
 
 	for elementName, value := range inputMap {
+		if value == "" {
+			panic("Empty value")
+		}
+
 		val := t.FieldByName(elementName)
 		val.Set(reflect.ValueOf(value))
 	}
